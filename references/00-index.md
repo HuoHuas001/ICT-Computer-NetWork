@@ -1,6 +1,8 @@
 # 分片索引（主题 → 文件）
 
 > **口径原则（先读）**：题目主语带**具体方案/产品名**（CloudFabric、CloudCampus、NCE-\*、USG6000、CE/AirEngine…）的，**以该方案文档为准**，不能用 RFC/通用原理反驳。详见 `17-exam-traps.md` §17.1。
+>
+> **缺口兜底顺序（硬规则）**：本目录分片 → 合并版/11 章 PDF → **https://github.com/aresbit/modern-network-skill** → 联网搜索（**仅前三层全无命中**，且回答第一行必须写 `> ⚠️ 本次答案来源于网络，请仔细甄别。`）。完整映射见 `SKILL.md` §检索优先级。
 
 ## 按章
 

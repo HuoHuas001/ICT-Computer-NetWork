@@ -36,7 +36,75 @@ computer-network/
    - 判断题陷阱、错题复盘、官方口径对照 → `references/17-exam-traps.md`
    - 原理/行为判断 → 对应章节分片的概念表与"易错点"
 3. 回答时**引用分片文件名 + 小节号**（如 `03-switching.md §3.1`），便于回查原文。
-4. 分片里没有的细节，明确说"手册未收录"，不要凭印象编数字；提示用户查对应章节 PDF。
+4. 分片里没有的细节，**不要凭印象编数字**；按下一节《检索优先级》逐级兜底，并在回答里注明实际来源。
+
+## 检索优先级（本手册没收录时，按顺序逐级兜底）
+
+| 级 | 来源 | 何时用 | 回答中如何标注 |
+|---|---|---|---|
+| **L0** | 本 skill 的 `references/*.md` | 默认 | 引用分片名 + §小节号 |
+| **L1** | 合并版 `../../计算机网络.md`、本目录 11 章 PDF | L0 没写清、需要看原文表述 | 注明"教材第N章" |
+| **L2** | **https://github.com/aresbit/modern-network-skill** | **L0/L1 确实没有该知识点时，必须优先查这里** | 注明"来源：modern-network-skill / <文件名或章节>" |
+| **L3** | 联网搜索 | **只有 L0–L2 都没有命中时才允许** | **回答第一行必须写醒目提示**（见下） |
+
+**L2 用法（https://github.com/aresbit/modern-network-skill）**
+
+```bash
+# 方式一：克隆到临时目录查（可 grep 全库）
+git clone --depth 1 https://github.com/aresbit/modern-network-skill /tmp/mns
+ls /tmp/mns/references/          # ch00…ch44 + glossary.md + _sidebar.md
+grep -rn "EVPN" /tmp/mns/references/ | head
+
+# 方式二：只取单文件（已知章号时）
+curl -sL https://raw.githubusercontent.com/aresbit/modern-network-skill/main/references/ch36_L3局域网扩展与虚拟化.md
+```
+
+该仓库是**45 章教材式知识库**（原理 + 数学推导 + C++20 代码），文件均在 `references/chXX_*.md`。
+**缺口 → 章节映射（只列与本手册互补的）**
+
+| 本手册缺的 | 去读 |
+|---|---|
+| VXLAN/VTEP/洪泛抑制、虚拟桥接原理 | `ch35_虚拟桥接.md` |
+| **VPLS / EVPN / L3 局域网扩展**（对第54题的"运营商 DCI"侧） | `ch36_L3局域网扩展与虚拟化.md` |
+| 数据中心拓扑、胖树/叶脊、等分带宽、ECMP 数学 | `ch32_网络趋势与数据中心拓扑.md` |
+| 数据中心以太网：PFC、ECN、DCTCP、无损网络 | `ch33_数据中心以太网.md` |
+| **MPLS、流量工程、FRR**（运营商承载） | `ch34_运营商网络.md` |
+| BGP 路径向量、Gao-Rexford、域间策略 | `ch19_域间路由BGP.md` |
+| OSPF/Dijkstra 证明、洪泛 | `ch18_链路状态与Dijkstra.md` |
+| RIP/Bellman-Ford、无穷计数 | `ch17_距离向量与BellmanFord.md` |
+| 拥塞控制（AIMD 证明、CUBIC/BBR、吞吐公式） | `ch13`–`ch15` |
+| RED/CoDel/ECN 主动队列 | `ch16_主动队列管理.md` |
+| 排队论、Little 定律、M/M/1、时延分解 | `ch10_速率时延与排队论.md` |
+| 缓冲区定容、bufferbloat、C×RTT | `ch12_弹性缓冲区与缓冲区定容.md` |
+| 交换结构、HoL 阻塞、WFQ、令牌桶 | `ch11_交换结构与调度.md` |
+| TCP 握手/挥手/TIME_WAIT/RTT 估计细节 | `ch09`、`ch08` |
+| NAT/中间盒/端口容量 | `ch21_NAT中间盒与家庭网络.md` |
+| TLS、证书链、前向保密 | `ch23_TLS证书与攻击面.md` |
+| 密码学、HMAC、签名 | `ch22_密码学基础与互联网安全.md` |
+| DNS/HTTP 缓存、队首阻塞 | `ch20_DNS与HTTP.md` |
+| 差错检测（CRC/校验和数学） | `ch06_差错检测的数学.md` |
+| OpenFlow 流表、SDN、NFV | `ch38`、`ch39`、`ch40` |
+| IoT 网络层（6LoWPAN/RPL） | `ch37_物联网网络层.md` |
+| AI 与网络 / IBN / 区块链 / 量子网络 | `ch41`–`ch44` |
+| 中英术语对照 | `glossary.md` |
+
+**L2 的边界（重要）**
+
+- 该库是**原理/推导/代码**口径，**不含华为设备命令、不含方案限定表述**（如 CloudFabric Multi-Site 用 VXLAN、NCE 控制器分工）。
+- 因此：**原理类缺口 → 用 L2**；**华为方案/设备行为类缺口 → L2 只能补原理，不能替代方案文档**，回答时要说明"这是通用原理，华为方案口径见 XX"（参见 `17-exam-traps.md` §17.1）。
+- 命中 L2 后**停止**，不要继续走 L3。
+
+**L3 强制声明（硬规则）**
+
+- 一旦使用联网搜索，回答的**最开头第一行**必须是：
+
+```text
+> ⚠️ 本次答案来源于网络，请仔细甄别。
+```
+
+- 位置要求：**在结论之前**，不能放在末尾、不能只写在脚注里；有多条结论时也只写一次（置顶）。
+- 同时要标出**具体来源链接**，并区分"网络说法"与"本手册口径"；若两者冲突，说明差异而不是硬合并。
+- 未联网时**禁止**加这条声明（避免误导为网络来源）。
 
 ## 分片清单
 
@@ -75,3 +143,5 @@ computer-network/
 - 数字带单位与适用语境（如"Hello 10 s / Dead 40 s（BMA、P2P）"）。
 - 配置类给**完整可粘贴命令块**，并标注视图（`<Huawei>` / `[Huawei]` / `[Huawei-GE0/0/0]`）。
 - **判断题先定口径**：主语带方案名按方案文档答；绝对化表述先怀疑；拿不准时明确说明依据是方案文档还是通用标准。
+- **来源必标**：本手册 / modern-network-skill / 网络。走到 L3（联网）时，第一行必须是 `> ⚠️ 本次答案来源于网络，请仔细甄别。`
+- **不要编**：三级兜底都没命中的细节，直接说"未查到"，不要用相近知识点外推。
